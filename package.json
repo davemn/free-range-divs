@@ -1,6 +1,7 @@
 {
   "name": "free-range-divs",
   "version": "0.1.0",
+  "author": "David Mann <stratlater@gmail.com> (https://davemn.com)",
   "private": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -10,7 +11,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "URL_OF_YOUR_REPOSITORY"
+    "url": "https://github.com/davemn/free-range-divs.git"
   },
   "dependencies": {
     "@babel/runtime": "^7.10.5",
