@@ -99,6 +99,7 @@ function WindowReducer(state, action) {
         case WindowEdge.BOTTOM:
           newSize = [state.size[0], state.size[1] + action.value[1]];
           break;
+        default:
       }
       return {
         ...state,

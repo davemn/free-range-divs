@@ -2,6 +2,7 @@
   "name": "free-range-divs",
   "version": "0.1.0",
   "author": "David Mann <stratlater@gmail.com> (https://davemn.com)",
+  "license": "MIT",
   "private": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
