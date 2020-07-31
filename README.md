@@ -26,7 +26,7 @@ Currently it's two React components:
 
 # Can I see it in action?
 
-Yep: [TODO Netlify link]
+Yep, [have fun!](https://musing-varahamihira-b4d852.netlify.app/)
 
 # API
 
