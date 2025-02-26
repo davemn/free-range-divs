@@ -2,20 +2,24 @@ import React, { useEffect, useReducer, type Reducer } from 'react';
 
 import { Stylesheet } from './stylesheet.js';
 
+const freeDivBaseStyles = {
+  position: 'absolute',
+  display: 'grid',
+  gridTemplateColumns: '8px 1fr 8px',
+  gridTemplateRows: '8px 1fr 8px',
+  gridTemplateAreas: `
+    '. edge-top .'
+    'edge-left content edge-right'
+    '. edge-bottom .'
+    `,
+};
+
 const classes = Stylesheet.create({
   freeDiv: {
-    position: 'absolute',
-    display: 'grid',
-    gridTemplateColumns: '8px 1fr 8px',
-    gridTemplateRows: '8px 1fr 8px',
-    gridTemplateAreas: `
-      '. edge-top .'
-      'edge-left content edge-right'
-      '. edge-bottom .'
-      `,
+    ...freeDivBaseStyles,
   },
   activeFreeDiv: {
-    extend: 'window',
+    ...freeDivBaseStyles,
     zIndex: 100,
   },
   topEdge: {
@@ -158,28 +162,20 @@ export interface IRenderFnProps {
 }
 
 export interface IFreeDivProps {
-  canDrag: boolean;
-  canResize: boolean;
-  canScrollX: boolean;
-  canScrollY: boolean;
   children: (props: IRenderFnProps) => React.ReactNode;
   initialSize?: [number, number];
-  id: number;
-  isActive: boolean;
-  onActivate: (id: number) => void;
+  id?: number;
+  isActive?: boolean;
+  onActivate?: (id: number) => void;
 }
 
 export const FreeDiv = ({
-  canDrag,
-  canResize,
-  canScrollX,
-  canScrollY,
   children,
   initialSize = [250, 250],
   /* remaining are injected by <Desktop> */
   id,
-  isActive,
-  onActivate,
+  isActive = false,
+  onActivate = () => {},
 }: IFreeDivProps) => {
   const [state, dispatch] = useReducer(FreeDivReducer, {
     activeOperation: WindowOp.NONE,
@@ -204,6 +200,9 @@ export const FreeDiv = ({
 
     let prevPosition: number[];
     const handleMouseMove = (event: MouseEvent) => {
+      // event.preventDefault();
+      // event.stopPropagation();
+
       const newPosition = [event.pageX, event.pageY];
       if (!prevPosition) {
         prevPosition = newPosition;
@@ -225,6 +224,10 @@ export const FreeDiv = ({
 
   const handleMouseDownEdge =
     (edge: WindowEdge) => (event: React.MouseEvent) => {
+      // Prevent accidentally highlighting text in the content area of the FreeDiv
+      event.preventDefault();
+      event.stopPropagation();
+
       dispatch({ type: 'startResize', value: edge });
     };
 
@@ -259,9 +262,12 @@ export const FreeDiv = ({
 
   return (
     <div
-      key={id}
       className={isActive ? classes.activeFreeDiv : classes.freeDiv}
-      onMouseDown={() => onActivate(id)}
+      onMouseDown={() => {
+        if (id !== undefined) {
+          onActivate(id);
+        }
+      }}
       onMouseUp={handleMouseUp}
       style={{
         width: `${state.size[0] + 2 * edgeGrabSize}px`,

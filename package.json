@@ -25,6 +25,6 @@
     "react": ">=16.8"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.json"
+    "build": "rm -rf dist/ && tsc --project tsconfig.json"
   }
 }
