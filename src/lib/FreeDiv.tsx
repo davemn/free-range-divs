@@ -1,8 +1,9 @@
-import React, { useEffect, useReducer } from 'react';
-import { createUseStyles } from 'react-jss';
+import React, { useEffect, useReducer, type Reducer } from 'react';
 
-const useStyles = createUseStyles({
-  window: {
+import { Stylesheet } from './stylesheet.js';
+
+const classes = Stylesheet.create({
+  freeDiv: {
     position: 'absolute',
     display: 'grid',
     gridTemplateColumns: '8px 1fr 8px',
@@ -13,51 +14,82 @@ const useStyles = createUseStyles({
       '. edge-bottom .'
       `,
   },
-  activeWindow: {
+  activeFreeDiv: {
     extend: 'window',
     zIndex: 100,
   },
-  topEdge: `
-    grid-area: edge-top;
-    place-self: stretch;
-    cursor: ns-resize;
-  `,
-  leftEdge: `
-    grid-area: edge-left;
-    place-self: stretch;
-    cursor: ew-resize;
-  `,
-  content: `
-    grid-area: content;
-    place-self: stretch;
-    overflow: hidden;
-  `,
-  rightEdge: `
-    grid-area: edge-right;
-    place-self: stretch;
-    cursor: ew-resize;
-  `,
-  bottomEdge: `
-    grid-area: edge-bottom;
-    place-self: stretch;
-    cursor: ns-resize;
-  `,
+  topEdge: {
+    gridArea: 'edge-top',
+    placeSelf: 'stretch',
+    cursor: 'ns-resize',
+  },
+  leftEdge: {
+    gridArea: 'edge-left',
+    placeSelf: 'stretch',
+    cursor: 'ew-resize',
+  },
+  content: {
+    gridArea: 'content',
+    placeSelf: 'stretch',
+    overflow: 'hidden',
+  },
+  rightEdge: {
+    gridArea: 'edge-right',
+    placeSelf: 'stretch',
+    cursor: 'ew-resize',
+  },
+  bottomEdge: {
+    gridArea: 'edge-bottom',
+    placeSelf: 'stretch',
+    cursor: 'ns-resize',
+  },
 });
 
-const WindowOp = {
-  NONE: 0,
-  MOVE: 1,
-  RESIZE: 2,
-};
-const WindowEdge = {
-  NONE: 0,
-  TOP: 1,
-  LEFT: 2,
-  RIGHT: 3,
-  BOTTOM: 4,
-};
+enum WindowOp {
+  NONE = 0,
+  MOVE = 1,
+  RESIZE = 2,
+}
 
-function WindowReducer(state, action) {
+enum WindowEdge {
+  NONE = 0,
+  TOP = 1,
+  LEFT = 2,
+  RIGHT = 3,
+  BOTTOM = 4,
+}
+
+interface IFreeDivState {
+  activeOperation: WindowOp;
+  activeEdge: WindowEdge;
+  position: [number, number];
+  size: [number, number];
+}
+
+type IFreeDivAction =
+  | {
+      type: 'startMove';
+    }
+  | {
+      type: 'moveRelative';
+      value: [number, number];
+    }
+  | {
+      type: 'startResize';
+      value: WindowEdge;
+    }
+  | {
+      type: 'resizeRelative';
+      value: [number, number];
+    }
+  | {
+      type: 'endOperation';
+    };
+
+const FreeDivReducer: Reducer<IFreeDivState, IFreeDivAction> = (
+  state,
+  action,
+) => {
   switch (action.type) {
     case 'startMove':
       return { ...state, activeOperation: WindowOp.MOVE };
@@ -115,9 +147,29 @@ function WindowReducer(state, action) {
     default:
       throw new Error();
   }
+};
+
+export interface IRenderFnProps {
+  isActive: boolean;
+  titleProps: {
+    onMouseDown: (event: React.MouseEvent) => void;
+    style: React.CSSProperties;
+  };
 }
 
-const Window = ({
+export interface IFreeDivProps {
+  canDrag: boolean;
+  canResize: boolean;
+  canScrollX: boolean;
+  canScrollY: boolean;
+  children: (props: IRenderFnProps) => React.ReactNode;
+  initialSize?: [number, number];
+  id: number;
+  isActive: boolean;
+  onActivate: (id: number) => void;
+}
+
+export const FreeDiv = ({
   canDrag,
   canResize,
   canScrollX,
@@ -128,9 +180,8 @@ const Window = ({
   id,
   isActive,
   onActivate,
-}) => {
-  const classes = useStyles();
-  const [state, dispatch] = useReducer(WindowReducer, {
+}: IFreeDivProps) => {
+  const [state, dispatch] = useReducer(FreeDivReducer, {
     activeOperation: WindowOp.NONE,
     activeEdge: WindowEdge.NONE,
     position: [0, 0],
@@ -141,7 +192,7 @@ const Window = ({
     dispatch({ type: 'endOperation' });
   };
 
-  const handleMouseDownTitleBar = (event) => {
+  const handleMouseDownTitleBar = (event: React.MouseEvent) => {
     dispatch({ type: 'startMove' });
   };
 
@@ -151,8 +202,8 @@ const Window = ({
       return;
     }
 
-    let prevPosition = null;
-    const handleMouseMove = (event) => {
+    let prevPosition: number[];
+    const handleMouseMove = (event: MouseEvent) => {
       const newPosition = [event.pageX, event.pageY];
       if (!prevPosition) {
         prevPosition = newPosition;
@@ -172,9 +223,10 @@ const Window = ({
     };
   }, [state.activeOperation]);
 
-  const handleMouseDownEdge = (edge) => (event) => {
-    dispatch({ type: 'startResize', value: edge });
-  };
+  const handleMouseDownEdge =
+    (edge: WindowEdge) => (event: React.MouseEvent) => {
+      dispatch({ type: 'startResize', value: edge });
+    };
 
   // Handle state updates for resizing a window
   useEffect(() => {
@@ -182,8 +234,8 @@ const Window = ({
       return;
     }
 
-    let prevPosition = null;
-    const handleMouseMove = (event) => {
+    let prevPosition: number[];
+    const handleMouseMove = (event: MouseEvent) => {
       const newPosition = [event.pageX, event.pageY];
       if (!prevPosition) {
         prevPosition = newPosition;
@@ -208,7 +260,7 @@ const Window = ({
   return (
     <div
       key={id}
-      className={isActive ? classes.activeWindow : classes.window}
+      className={isActive ? classes.activeFreeDiv : classes.freeDiv}
       onMouseDown={() => onActivate(id)}
       onMouseUp={handleMouseUp}
       style={{
@@ -249,5 +301,3 @@ const Window = ({
     </div>
   );
 };
-
-export { Window };
