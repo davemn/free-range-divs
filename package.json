@@ -4,6 +4,7 @@
   "author": "David Mann <stratlater@gmail.com> (https://davemn.com)",
   "license": "MIT",
   "private": false,
+  "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "files": [
@@ -14,46 +15,16 @@
     "type": "git",
     "url": "https://github.com/davemn/free-range-divs.git"
   },
-  "dependencies": {
-    "@babel/runtime": "^7.10.5",
-    "react-jss": "^10.3.0"
-  },
   "devDependencies": {
-    "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.10.5",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "babel-preset-react-app": "^9.1.2",
-    "prettier": "^2.0.5",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "@types/react": "^18.3.18",
+    "prettier": "3.5.2",
+    "react": "^18.3.1",
+    "typescript": "^5.7.3"
   },
   "peerDependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react": ">=16.8"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "rm -rf dist && NODE_ENV=production babel src/lib --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
-    "build-demo": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "build": "rm -rf dist/ && tsc --project tsconfig.json"
   }
 }

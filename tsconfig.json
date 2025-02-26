@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "node16",
+    "target": "es2020",
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "declaration": true,
+    // "rootDir": "src",
+    "outDir": "dist",
+    "jsx": "react"
+  },
+  "include": ["src/**/*"]
+}
