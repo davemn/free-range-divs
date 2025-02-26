@@ -30,9 +30,11 @@ Yep, [have fun!](https://musing-varahamihira-b4d852.netlify.app/)
 
 # API
 
+By example:
+
 ```js
 <Desktop width={1024} height={768}>
-  <Window>
+  <FreeDiv key="app-notepad">
     {({ isActive, titleProps }) => (
       <div className={`my-window ${isActive ? 'my-window--active' : ''}`}>
         <div className="my-window__title" {...titleProps}>
@@ -41,8 +43,8 @@ Yep, [have fun!](https://musing-varahamihira-b4d852.netlify.app/)
         <h1>Window contents.</h1>
       </div>
     )}
-  </Window>
-  <Window>
+  </FreeDiv>
+  <FreeDiv key="app-chrome">
     {({ isActive, titleProps }) => (
       <div className={`my-window ${isActive ? 'my-window--active' : ''}`}>
         <div className="my-window__title" {...titleProps}>
@@ -51,13 +53,49 @@ Yep, [have fun!](https://musing-varahamihira-b4d852.netlify.app/)
         <p>Leave a message...</p>
       </div>
     )}
-  </Window>
+  </FreeDiv>
 </Desktop>
 ```
 
-Each `<Window>` takes a render function, that receives:
+```css
+.my-window {
+  background-color: white;
+  color: #888;
+  border: 2px solid #ddd;
+  height: calc(100% - 4px);
+}
+.my-window--active {
+  color: black;
+}
+.my-window__title {
+  background-color: #ddd;
+  padding: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+```
+
+Each `<FreeDiv>` takes a render function, that receives:
 
 - `isActive`: Is this window the one currently on top?
-- `titleProps`: Spread this on whichever element represents the area that initiates a window drag. Traditionally this is the title bar, but you can pass it to *any* part of your component.
+- `titleProps`: Spread this on whichever element represents the area that initiates a window drag. Traditionally this is the title bar, but you can pass it to _any_ part of your component.
 
-The render function should return *your component*. In the example above I show returning bare DOM elements with a couple of custom classNames. But those are just for demo!
+The render function should return _your component_. In the example above I show returning bare DOM elements with a couple of custom classNames. But those are just for demo!
+
+## API - `<FreeDiv>` Only
+
+Using the `<Desktop>` component is entirely optional! It provides tracking for which window among its children is "active". An active FreeDiv has a higher z-index than its siblings, and the `isActive` render prop is set to true.
+
+If your app doesn't need to manage multiple `<FreeDiv>`s or if you're only interested in the drag/drop/resize functionality, `<FreeDiv>` can be used on its own. Note that the `isActive` prop passed to the render function never changes if there's no container `<Desktop>`!
+
+## Deployment
+
+For my own notes, but also for any future contributors.
+
+Steps:
+
+1. Merge all new features via PR. No PRs should modify the `dist/` directory.
+2. (Admin only) `npm version [major|minor|patch]` on main branch.
+3. (Admin only) Verify the contents of the new release's tarball, `npm pack --dry-run`.
+4. (Admin only) `npm publish`
