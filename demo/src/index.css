@@ -1,30 +1,37 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 .my-window {
-  background-color: white;
-  color: #888;
-  border: 2px solid #ddd;
-  height: calc(100% - 4px);
-}
-.my-window--active {
-  color: black;
+  height: calc(100% - 2px);
+
+  border-radius: 20px;
+  border: 1px solid #fff;
+  background:
+    radial-gradient(
+      89.53% 70.71% at 100% 100%,
+      #bd34fe 0%,
+      rgba(189, 52, 254, 0.5) 100%
+    ),
+    radial-gradient(
+      84.71% 70.71% at 0% 0%,
+      #41d1ff 0%,
+      rgba(65, 209, 255, 0.5) 100%
+    ),
+    #707070;
+  overflow: hidden;
 }
 .my-window__title {
-  background-color: #ddd;
-  padding: 12px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  display: flex;
+  padding: 8px 0px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+
+  background: rgba(247, 210, 253, 0.33);
+}
+
+.my-window--active .my-window__title {
+  background: #f7d2fd;
 }

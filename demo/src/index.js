@@ -7,26 +7,33 @@ import './index.css';
 const App = (props) => {
   return (
     <Desktop width={1024} height={768}>
-      <Window>
+      <FreeDiv key="app-notepad">
         {({ isActive, titleProps }) => (
           <div className={`my-window ${isActive ? 'my-window--active' : ''}`}>
             <div className="my-window__title" {...titleProps}>
-              notepad.exe - Hello World
+              Background Window
             </div>
-            <h1>Window contents.</h1>
+            <h1>This div is also resizable.</h1>
+            <p>Want to learn more?</p>
+            <button>Open the Docs</button>
           </div>
         )}
-      </Window>
-      <Window>
+      </FreeDiv>
+      <FreeDiv key="app-chrome">
         {({ isActive, titleProps }) => (
           <div className={`my-window ${isActive ? 'my-window--active' : ''}`}>
             <div className="my-window__title" {...titleProps}>
-              chrome.exe - Messageboard
+              App Window
             </div>
-            <p>Leave a message...</p>
+            <h1>This div is resizable.</h1>
+            <p>
+              It's draggable too. Try dragging its title bar to see what's
+              underneath.
+            </p>
+            <p>To resize, drag any of the edges.</p>
           </div>
         )}
-      </Window>
+      </FreeDiv>
     </Desktop>
   );
 };
@@ -35,5 +42,5 @@ ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );

@@ -1,4 +1,4 @@
-# Free Range Divs!
+# Free Range `<Div>`s
 
 Have you ever wanted to build a web page that behaves like a desktop?
 Think `<div>`s that behave like windows, with dragging and resizing that works the way you expect.
@@ -11,12 +11,14 @@ Or maybe you're making an avant-garde design for your personal website?
 
 ![Screen Shot 2020-07-30 at 8 52 25 PM](https://user-images.githubusercontent.com/10509704/88991643-d5b47900-d2a6-11ea-9d51-3d09fffe533c.png)
 
+![An illustration of two layered windows. The nearest window is title "App Window". The background window is titled "Background Window".](/assets/promo.png?raw=true)
+
 # What's in the box?
 
 Currently it's two React components:
 
-- `<Desktop>` - Coordinates the child `<Window>`s. It's the sandbox for absolute positioning of the `<Window>`s.
-- `<Window>` - A minimally-styled container that holds your component. **You decide** how your windows should look. `<Window>` takes care of movement, resizing, and layering.
+- `<Desktop>` - Coordinates the child `<FreeDiv>`s. It's the sandbox for absolute positioning of the `<FreeDiv>`s.
+- `<FreeDiv>` - A minimally-styled container that holds your component. **You decide** how your content should look. `<FreeDiv>` takes care of movement and resizing.
 
 # How do I install it?
 
