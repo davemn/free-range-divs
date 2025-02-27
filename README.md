@@ -9,8 +9,6 @@ Or maybe you're making an avant-garde design for your personal website?
 
 `free-range-divs` is for you.
 
-![Screen Shot 2020-07-30 at 8 52 25 PM](https://user-images.githubusercontent.com/10509704/88991643-d5b47900-d2a6-11ea-9d51-3d09fffe533c.png)
-
 ![An illustration of two layered windows. The nearest window is title "App Window". The background window is titled "Background Window".](/assets/promo.png?raw=true)
 
 # What's in the box?
