@@ -95,7 +95,9 @@ For my own notes, but also for any future contributors.
 
 Steps:
 
-1. Merge all new features via PR. No PRs should modify the `dist/` directory.
-2. (Admin only) `npm version [major|minor|patch]` on main branch.
-3. (Admin only) Verify the contents of the new release's tarball, `npm pack --dry-run`.
-4. (Admin only) `npm publish`
+1. Merge all new features via PR.
+2. (Admin only) `pnpm version [major|minor|patch]` on main branch.
+3. (Admin only) `git push origin main`
+4. (Admin only) `git push origin tag [vN.N]`
+
+This will run the associated Github workflow to publish to NPM with trusted publishing.
